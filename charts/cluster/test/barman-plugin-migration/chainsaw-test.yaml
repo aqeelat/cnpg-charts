@@ -76,7 +76,6 @@ spec:
               helm upgrade \
                 --namespace $NAMESPACE \
                 --values ./04-barman-plugin-migration_cluster.yaml \
-                --wait \
                 barman-plugin-migration ../../
         - sleep:
             duration: 5s
