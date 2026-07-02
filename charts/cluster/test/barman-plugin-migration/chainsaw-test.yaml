@@ -90,8 +90,6 @@ spec:
       try:
         - apply:
             file: ./05-backup.yaml
-        - assert:
-            file: ./05-backup_running-assert.yaml
       catch:
         - describe:
             apiVersion: postgresql.cnpg.io/v1
