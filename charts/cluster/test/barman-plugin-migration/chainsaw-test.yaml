@@ -76,11 +76,8 @@ spec:
                 --values ./04-barman-plugin-migration_cluster.yaml \
                 --wait \
                 barman-plugin-migration ../../
-        - script:
-            content: |
-              kubectl get events -n "$NAMESPACE" --field-selector reason=UpgradingInstance \
-                -o jsonpath='{range .items[*]}{.involvedObject.name}{"\n"}{end}' \
-                | grep -qxF barman-plugin-migration-cluster
+        - assert:
+            file: ./04-barman-plugin-migration_cluster-upgrading-assert.yaml
         - assert:
             file: ./04-barman-plugin-migration_cluster-healthy-assert.yaml
       catch:
