@@ -68,19 +68,19 @@ spec:
         - podLogs:
             selector: batch.kubernetes.io/job-name=data-write
     - name: Switch the cluster to using Barman CNPG-I for backups
-      timeouts:
-        apply: 10s
       try:
         - script:
             content: |
               helm upgrade \
                 --namespace $NAMESPACE \
                 --values ./04-barman-plugin-migration_cluster.yaml \
+                --wait \
                 barman-plugin-migration ../../
-        - sleep:
-            duration: 5s
-        - assert:
-            file: ./04-barman-plugin-migration_cluster-upgrading-assert.yaml
+        - script:
+            content: |
+              kubectl get events -n "$NAMESPACE" --field-selector reason=UpgradingInstance \
+                -o jsonpath='{range .items[*]}{.involvedObject.name}{"\n"}{end}' \
+                | grep -qxF barman-plugin-migration-cluster
         - assert:
             file: ./04-barman-plugin-migration_cluster-healthy-assert.yaml
       catch:
