@@ -2,6 +2,12 @@ type: postgresql
 mode: standalone
 cluster:
   instances: 1
+  # Use a short stopDelay so teardown is fast: the immediate scheduled backup
+  # (the chart forces `immediate: true`) can still be running at cleanup time,
+  # and Barman blocks instance shutdown until it completes. A low stopDelay
+  # caps the pod's terminationGracePeriodSeconds, force-stopping the instance
+  # promptly. This test only needs to observe a backup *start* and *run*.
+  stopDelay: 30
   storage:
     size: 256Mi
 
