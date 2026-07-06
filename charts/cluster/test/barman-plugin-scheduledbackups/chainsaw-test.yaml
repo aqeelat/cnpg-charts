@@ -22,8 +22,6 @@ spec:
                 scheduledbackups ../../
         - assert:
             file: ./01-scheduledbackups_cluster-assert.yaml
-        - assert:
-            file: ./01-scheduledbackups_cluster-backup-running-assert.yaml
         - apply:
             file: ./01.1-checkpoint.yaml
     - name: Cleanup

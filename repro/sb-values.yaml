@@ -2,12 +2,6 @@ type: postgresql
 mode: standalone
 cluster:
   instances: 1
-  # Use a short stopDelay so teardown is fast: the chart forces `immediate: true`
-  # on scheduled backups, so a backup can still be running at cleanup time, and
-  # Barman blocks instance shutdown until it completes. A low stopDelay caps the
-  # pod's terminationGracePeriodSeconds, force-stopping the instance promptly.
-  # This test only needs to observe that a backup was started.
-  stopDelay: 30
   storage:
     size: 256Mi
 
@@ -17,10 +11,7 @@ backups:
   pluginConfiguration:
     name: barman-cloud.cloudnative-pg.io
   provider: s3
-  endpointURL: "https://minio.minio.svc.cluster.local"
-  endpointCA:
-    name: kube-root-ca.crt
-    key: ca.crt
+  endpointURL: "http://minio.minio.svc.cluster.local:9000"
   wal:
     encryption: ""
   data:
